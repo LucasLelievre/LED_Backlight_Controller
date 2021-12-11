@@ -1,11 +1,6 @@
 #include <iostream>
-
-// Sleep function
-#ifdef _WIN32
-    #include <Windows.h>
-#else
-    #include <unistd.h>
-#endif
+#include <chrono>
+#include <thread>
 
 #include "ScreenCapture/ScreenCaptureFactory.h"
 #include "SerialArduino/SerialArduinoFactory.h"
@@ -39,7 +34,9 @@ int main(int argc, const char* argv[]) {
 	// sscanf(argv[8], "%f", &frameRate);
     scanArg(argv[8], "%f", &frameRate);
 	// translate the number of images per second to the number of milliseconds needed to wait to acheive the framerate
-	frameRate = (1000 / frameRate) - 6;
+	frameRate = (1000 / frameRate);
+    std::chrono::milliseconds sleepTime((int)frameRate);
+
     // Screen size and LEDs number
 	int args[5];
 	for (int i = 0; i < 5; i++)
@@ -74,12 +71,12 @@ int main(int argc, const char* argv[]) {
 
     std::cout << "App initialized.\nStarting to capture the screen and sending the data.\n";
 
-    /*while(true) {
+    while(true) {
         sc->captureNext();
         char * serialData = ledStrip.computeColours(sc->getScreenData());
         arduino->writeData(serialData, args[2]*3+2);
-        Sleep(frameRate);
-    }*/
+        std::this_thread::sleep_for(sleepTime);
+    }
 
     std::cout << "Quiting" << std::endl;
     return 0;
