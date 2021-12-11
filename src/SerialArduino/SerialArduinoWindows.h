@@ -1,3 +1,5 @@
+#pragma once
+
 #ifndef SERIALCLASS_H_INCLUDED
     #define SERIALCLASS_H_INCLUDED
 #endif

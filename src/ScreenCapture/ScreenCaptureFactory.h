@@ -1,3 +1,5 @@
+#pragma once
+
 #ifdef _WIN32
     #include "ScreenCaptureWindows.h"
 #else
@@ -6,13 +8,18 @@
 
 class ScreenCaptureFactory {
 public:
-    static ScreenCapture* Create();
+    static ScreenCapture* Create(int screenNumber);
 };
 
-ScreenCapture* ScreenCaptureFactory::Create() {
+/**
+ * @brief Creates a new ScreenCapture object based on operating system
+ * 
+ * @return ScreenCapture* windows or linux derived class
+ */
+ScreenCapture* ScreenCaptureFactory::Create(int screenNumber) {
     #ifdef _WIN32
-        return new ScreenCaptureWindows();
+        return new ScreenCaptureWindows(screenNumber);
     #else
-        return new ScreenCaptureLinux();
+        return new ScreenCaptureLinux(screenNumber);
     #endif
 }

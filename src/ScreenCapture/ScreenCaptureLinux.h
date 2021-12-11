@@ -1,3 +1,5 @@
+#pragma once
+
 #include <iostream>
 
 #include "ScreenCapture.h"
@@ -6,7 +8,7 @@ class ScreenCaptureLinux : public ScreenCapture {
 private:
     /* data */
 public:
-    ScreenCaptureLinux(/* args */);
+    ScreenCaptureLinux(int screenNumber);
     ~ScreenCaptureLinux();
 
     std::string initialize();

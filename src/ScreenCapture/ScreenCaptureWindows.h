@@ -1,5 +1,6 @@
-#include <iostream>
+#pragma once
 
+#include <iostream>
 #include <d3d11.h>
 #include <dxgi1_2.h>
 
@@ -9,7 +10,7 @@ class ScreenCaptureWindows : public ScreenCapture {
 private:
     /* data */
 public:
-    ScreenCaptureWindows(/* args */);
+    ScreenCaptureWindows(int screenNumber);
     ~ScreenCaptureWindows();
 
     std::string initialize();
