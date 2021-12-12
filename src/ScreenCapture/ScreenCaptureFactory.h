@@ -3,7 +3,7 @@
 #ifdef _WIN32
     #include "ScreenCaptureWindows.h"
 #else
-    #include "ScreenCaptureLinux.h"
+    #include "ScreenCaptureLinuxX11.h"
 #endif
 
 class ScreenCaptureFactory {
@@ -20,6 +20,6 @@ ScreenCapture* ScreenCaptureFactory::Create(int screenNumber) {
     #ifdef _WIN32
         return new ScreenCaptureWindows(screenNumber);
     #else
-        return new ScreenCaptureLinux(screenNumber);
+        return new ScreenCaptureLinuxX11(screenNumber);
     #endif
 }
