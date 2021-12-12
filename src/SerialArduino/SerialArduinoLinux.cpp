@@ -1,5 +1,3 @@
-#pragma once
-
 #include "SerialArduinoLinux.h"
 
 /**
@@ -8,6 +6,7 @@
  * @param port the port name/number that the arduino is connected to
  */
 SerialArduinoLinux::SerialArduinoLinux(const char* port) {
+    this->port = port;
 }
 
 /**
@@ -28,6 +27,9 @@ SerialArduinoLinux::~SerialArduinoLinux() {
  * @return int //TODO what is returned here ?
  */
 int SerialArduinoLinux::readData(char* buffer, unsigned int nbChar) {
+    for (unsigned int i = 0; i < nbChar; i++) {
+        buffer[i] = i;
+    }
     return 0;
 }
 
@@ -40,6 +42,10 @@ int SerialArduinoLinux::readData(char* buffer, unsigned int nbChar) {
  * @return false failure
  */
 bool SerialArduinoLinux::writeData(const char* buffer, unsigned int nbChar) {
+    for (unsigned int i = 0; i < nbChar; i++) {
+        std::cout << buffer[i] << "\t";
+    }
+    std::cout << "\n";
     return false;
 }
 

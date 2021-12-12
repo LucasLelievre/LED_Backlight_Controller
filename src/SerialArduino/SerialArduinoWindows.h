@@ -1,3 +1,14 @@
+/**
+ * @file SerialArduinoWindows.h
+ * @author Lucas Lelièvre
+ * @brief Based on code example from arduino : https://playground.arduino.cc/Interfacing/CPPWindows/
+ * @version 0.1
+ * @date 2021-12-11
+ * 
+ * @copyright Copyright (c) 2021 Arduino.cc
+ * 
+ */
+
 #pragma once
 
 #ifndef SERIALCLASS_H_INCLUDED

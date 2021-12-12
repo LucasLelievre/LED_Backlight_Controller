@@ -1,10 +1,12 @@
 #pragma once
 
+#include <iostream>
+
 #include "SerialArduino.h"
 
 class SerialArduinoLinux : public SerialArduino {
 private:
-    /* data */
+    const char* port;
 public:
     SerialArduinoLinux(const char* port);
     ~SerialArduinoLinux();
