@@ -29,7 +29,7 @@ std::string ScreenCaptureLinuxX11::initialize() {
     this->dis=XOpenDisplay((char *)0);
     this->scr = XDefaultScreenOfDisplay(dis);
     this->drawable = XDefaultRootWindow(dis);
-    return "";
+    return "init success\n";
 }
 
 /**
