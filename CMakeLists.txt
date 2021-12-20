@@ -4,7 +4,7 @@ project(LED_Backlight_Controller VERSION 0.3.0)
 include(CTest)
 enable_testing()
 
-add_compile_options(-Wall -Wextra -pedantic)
+add_compile_options(-Wall -pedantic)
 
 # src folder
 set (SRC_FOLDER ${CMAKE_CURRENT_SOURCE_DIR}/src)
@@ -27,6 +27,14 @@ add_executable(LED_Backlight_Controller ${SRC_FILES})
 
 # Link the libraries
 if(WIN32)
+    FIND_PATH(DX_INCLUDE_PATH d3d11.h     PATHS     "$ENV{DXSDK_DIR}/Include" "C:/Program Files (x86)/Microsoft DirectX SDK/Include"     DOC "The directory where D3D11.h resides")  
+    find_library(D3D11_LIBRARY d3d11.lib     PATHS     "$ENV{DXSDK_DIR}/Lib/x86" "C:/Program Files (x86)/Microsoft DirectX SDK/Lib/x86"     DOC "The directory where d3d11.lib resides")  
+    find_library(D3DX11_LIBRARY d3dx11.lib     PATHS     "$ENV{DXSDK_DIR}/Lib/x86" "C:/Program Files (x86)/Microsoft DirectX SDK/Lib/x86"     DOC "The directory where d3dx11.lib resides") 
+    set (D3D11_FOUND "YES") 
+    set (D3D11_LIBRARIES ${D3D11_LIB}) 
+    mark_as_advanced (D3D11_INCLUDE_PATH D3D11_LIB)  
+    add_library(d3dx11.lib STATIC IMPORTED)
+    target_link_libraries(${PROJECT_NAME} ${D3D11_LIBRARY} ${D3DX11_LIBRARY})
 elseif(UNIX)
     find_package(X11 REQUIRED)
     if(X11_FOUND)
