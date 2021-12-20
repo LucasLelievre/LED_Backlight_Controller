@@ -1,9 +1,11 @@
 #pragma once
 
-#ifdef _WIN32
+#if _WIN32
     #include "ScreenCaptureWindows.h"
-#else
+#elif _X11LIBS
     #include "ScreenCaptureLinuxX11.h"
+#elif _WAYLANDLIBS
+    #include "ScreenCaptureLinuxWayland.h"
 #endif
 
 class ScreenCaptureFactory {
@@ -19,7 +21,11 @@ public:
 ScreenCapture* ScreenCaptureFactory::Create(int screenNumber) {
     #ifdef _WIN32
         return new ScreenCaptureWindows(screenNumber);
-    #else
+    #elif _X11LIBS
         return new ScreenCaptureLinuxX11(screenNumber);
+    #elif _WAYLANDLIBS
+        return new ScreenCaptureLinuxWayland(screenNumber);
+    #else
+        return NULL;
     #endif
 }

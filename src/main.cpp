@@ -23,7 +23,7 @@ void scanArg(const char* buffer, const char* format, T* output) {
 }
 
 int main(int argc, const char* argv[]) {
-    std::cout << "[0]\tStarting " << argv[0] << std::endl;
+    std::cout << "[Begin]\tStarting " << argv[0] << std::endl;
     if (argc != 10) {
         std::cout << "/!\\---------------------------------------------------------------------------------------------\n";
         std::cerr << "Incorrect number of arguments given.\nUsage :\n";
@@ -65,7 +65,7 @@ int main(int argc, const char* argv[]) {
 		std::cout << "Arduino connected.\n\n";
 	} else {
 		std::cout << "/!\\ Connexion to Arduino failed.\nQuitting.\n";
-		exit(1);
+		//exit(1);
 	}
 
     std::cout << "[3]\tInitializing the LED strip ...\n";
@@ -73,17 +73,20 @@ int main(int argc, const char* argv[]) {
 
     std::cout << "[4]\tInitializing the Screen capture ...\n";
     ScreenCapture* sc = ScreenCaptureFactory::Create(numScreen);
-    sc->initialize();
+    std::cout << sc->initialize();
 
     std::cout << "[5]\tApp initialized.\nStarting to capture the screen and sending the data.\n";
 
-    while(true) {
-        sc->captureNext();
-        char * serialData = ledStrip.computeColours(sc->getScreenData());
-        arduino->writeData(serialData, args[2]*3+2);
-        std::this_thread::sleep_for(sleepTime);
-    }
+    // while(true) {
+    //     std::cout << "capture\n";
+    //     sc->captureNext();
+    //     std::cout << "compute colours\n";
+    //     char * serialData = ledStrip.computeColours(sc->getScreenData());
+    //     std::cout << "send to arudino\n";
+    //     arduino->writeData(serialData, args[2]*3+2);
+    //     std::this_thread::sleep_for(sleepTime);
+    // }
 
-    std::cout << "[0]\tQuitting" << std::endl;
+    std::cout << "[End]\tQuitting" << std::endl;
     return 0;
 }
