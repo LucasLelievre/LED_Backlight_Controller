@@ -6,45 +6,54 @@
  * @param intArgs array of width/height/LEDtotal/LEDhorizontal/LEDvertical
  * @param ratio ratio of the captured zone
  */
-LEDstrip::LEDstrip(int* intArgs, float ratio) {
-    this->width = intArgs[0];
-    this->height = intArgs[1];
-    this->leds_total = intArgs[2];
-    this->leds_x = intArgs[3];
-    this->leds_y = intArgs[4];
+LEDstrip::LEDstrip(int screenX, int screenY, int ledNbTot, int ledNbX, int ledNbY, float ratio) {
+    this->width = screenX;
+    this->height = screenY;
+    this->leds_total = ledNbTot;
+    this->leds_x = ledNbX;
+    this->leds_y = ledNbY;
 
-    // Initialising the offset array
-    int x[16];
-    int y[16];
     // LED colours are the average of 256 samples of a portion of the screen
-    float rangeX, rangeY, stepX, stepY, startX, startY;
+    
+    // Samples positions arrays
+    int x[16], y[16];
+
     // Range is the size of the portion of the screen that will be represented by one LED
-    rangeX = (float)this->width / this->leds_x;
-    rangeY = (float)this->height / this->leds_y;
+    int rangeX, rangeY;
+    rangeX = this->width / this->leds_x;
+    rangeY = this->height / this->leds_y;
+
     // Step is the space between two samples for one LED (16*16=256 samples)
-    stepX = rangeX / 16.0f;
-    stepY = rangeY / 16.0f;
+    int stepX, stepY;
+    stepX = rangeX / 16;
+    stepY = rangeY / 16;
 
-    // Size of the "blackbars" when the captured zone ratio is different than the screen ratio.
-    float blackBarHeight = (this->height - (this->width / ratio)) / 2;
+    // Size of the "black bars" when the captured zone ratio is different than the screen ratio.
+    float imageHeight = (float)this->width / ratio;
+    int blackBarHeight = (this->height - (int)imageHeight) / 2;
 
+    // Start position is the first 
+    int startX, startY;
     for (int i = 0; i < this->leds_total; i++) { // For each LED...
         // start base on the position of the LED
-        startX = rangeX * (float)LEDposX(i) + stepX * 0.5f;
-        startY = rangeY * (float)LEDposY(i) + stepY * 0.5f;
-        if (i >= 15 && i <= 45)
+        startX = rangeX * LEDposX(i) + stepX/2;
+        startY = rangeY * LEDposY(i) + stepY/2;
+
+        // Offset the y position under the top black bar
+        if (i >= ledNbY && i <= ledNbY+ledNbX) {
             startY += blackBarHeight;
+        }
 
         for (int j = 0; j < 16; j++) {
             // Computing all sample positions
-            x[j] = (int)(startX + stepX * (float)j);
-            y[j] = (int)(startY + stepY * (float)j);
+            x[j] = startX + stepX * j;
+            y[j] = startY + stepY * j;
         }
 
         for (int row = 0; row < 16; row++) {
             for (int col = 0; col < 16; col++) {
                 // computing the index of the pixel in the bitmap data from the XY position
-                pixelOffset[i][row * 16 + col] = (x[row] + (y[col] * this->width)) * 4;
+                pixelOffset[i][row * 16 + col] = (size_t)((x[row] + (y[col] * this->width)) * 4);
             }
         }
     }
@@ -87,7 +96,7 @@ int LEDstrip::LEDposY(int led) {
 char * LEDstrip::computeColours(std::vector<unsigned char> * screenData) {
     // screenData is the BGRA bitmap data captured from the screen
 
-    this->data_index = 2; // 0, 1 are predefined header
+    int data_index = 2; // 0, 1 are predefined header
 
     for (int i = 0; i < this->leds_total; i++) {  // For each LED...
         int r = 0;
@@ -102,7 +111,6 @@ char * LEDstrip::computeColours(std::vector<unsigned char> * screenData) {
         }
 
         // Blend new pixel value with the value from the prior frame
-        // 
         ledColour[i * 3 + 0] = ((r >> 8) * (255 - this->fade) + prevColour[i * 3 + 0] * fade) >> 8;
         ledColour[i * 3 + 1] = ((g >> 8) * (255 - this->fade) + prevColour[i * 3 + 1] * fade) >> 8;
         ledColour[i * 3 + 2] = ((b >> 8) * (255 - this->fade) + prevColour[i * 3 + 2] * fade) >> 8;

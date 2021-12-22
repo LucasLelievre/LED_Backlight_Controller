@@ -6,6 +6,8 @@
 
 class ScreenCapture {
 public:
+    virtual ~ScreenCapture() = default;
+
     virtual std::string initialize() = 0;
     virtual void close() = 0;
     virtual bool captureNext() = 0;

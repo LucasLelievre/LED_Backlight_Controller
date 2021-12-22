@@ -14,13 +14,12 @@ struct Bitmap {
 
 class ScreenCaptureWindows : public ScreenCapture {
 private:
-    Bitmap Latest;
-	int    screenNumber;
-
-	ID3D11Device* D3DDevice = nullptr;
-	ID3D11DeviceContext* D3DDeviceContext = nullptr;
+	ID3D11Device*			D3DDevice = nullptr;
+	ID3D11DeviceContext*	D3DDeviceContext = nullptr;
 	IDXGIOutputDuplication* DeskDupl = nullptr;
 	DXGI_OUTPUT_DESC        OutputDesc;
+    Bitmap Latest;
+	int    screenNumber;
 	bool                    HaveFrameLock = false;
 public:
     ScreenCaptureWindows(int screenNumber);

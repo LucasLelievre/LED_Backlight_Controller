@@ -27,12 +27,12 @@ class SerialArduinoWindows: public SerialArduino {
 private:
     //Serial comm handler
     HANDLE hSerial;
-    //Connection status
-    bool connected;
     //Get various information about the connection
     COMSTAT status;
     //Keep track of last error
     DWORD errors;
+    //Connection status
+    bool connected;
 public:
     //Initialize Serial communication with the given COM port
     SerialArduinoWindows(const char* portName);
