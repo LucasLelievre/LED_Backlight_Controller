@@ -106,20 +106,22 @@ int main(int argc, const char* argv[]) {
 
     std::cout << "[5]\tApp initialized.\nStarting to capture the screen and sending the data.\n";
 
-    // while(true) {
-        std::cout << "capture frame : " << sc->captureNext() << '\n';
-        if (sc->getScreenData()->size() != (1920*1080*4)) {
-            std::cout << "ERROR:\tcapture not size of screen\n";
-            std::cout << (1920*1080*4) << ' ' << sc->getScreenData()->size() << '\n';
-        } else {
-            std::cout << "compute colours\n";
-            char * serialData = ledStrip.computeColours(sc->getScreenData());
-        
-    //     std::cout << "send to arudino\n";
-    //     arduino->writeData(serialData, args[2]*3+2);
-    //     std::this_thread::sleep_for(sleepTime);
+    while(sc->captureNext()) {
+        std::cout << "capture frame : " << '\n';
+        std::cout << sc->getScreenData()->size() << ' ' << 1920*1080*4 << std::endl;
+        std::cout << "compute colours\n";
+        char * serialData = ledStrip.computeColours(sc->getScreenData());
+        for (size_t i = 0; i < 182; i++) {
+            std::cout << serialData[i] << ' ';
         }
-    // }
+        std::cout << '\n';
+        
+        
+        // std::cout << "send to arudino\n";
+        // arduino->writeData(serialData, ledNbTot*3+2);
+        // std::this_thread::sleep_for(sleepTime);
+        std::this_thread::sleep_for(std::chrono::seconds(1));
+    }
 
     std::cout << "[End]\tQuitting" << std::endl;
     return 0;

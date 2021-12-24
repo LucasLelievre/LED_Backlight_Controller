@@ -13,7 +13,7 @@ std::string ScreenCaptureLinuxWayland::initialize(){
     if (!this->display) {
         return "Could not connect to the wayland display\n";
     }
-    return "init success\n";
+    return "";
 }
 
 void ScreenCaptureLinuxWayland::close(){
